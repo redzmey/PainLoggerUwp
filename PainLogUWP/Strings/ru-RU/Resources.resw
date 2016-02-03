@@ -117,30 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Arm" xml:space="preserve">
-    <value>Arm</value>
-  </data>
-  <data name="Back" xml:space="preserve">
-    <value>Back</value>
-  </data>
   <data name="Filter.Text" xml:space="preserve">
-    <value>Filter</value>
-    <comment>Filter</comment>
-  </data>
-  <data name="Head" xml:space="preserve">
-    <value>Head</value>
-  </data>
-  <data name="Leg" xml:space="preserve">
-    <value>Leg</value>
+    <value>Фильтр</value>
+    <comment>Фильтр</comment>
   </data>
   <data name="Part.Text" xml:space="preserve">
-    <value>Body part</value>
-    <comment>Body part</comment>
-  </data>
-  <data name="Stomach" xml:space="preserve">
-    <value>Stomach</value>
-  </data>
-  <data name="Type.Text" xml:space="preserve">
-    <value>Type</value>
+    <value>Часть тела</value>
+    <comment>Часть тела</comment>
   </data>
 </root>

@@ -32,17 +32,17 @@
             <TextBlock x:Uid="Filter"
                        Margin="0,0,0,2"
                        FontWeight="Bold"
-                       Text=" " />
+                       Text="Filter" />
             <AutoSuggestBox Margin="0,0,0,16"
-                            AutoMaximizeSuggestionArea="False"
-                            ItemsSource="{Binding AllElements}"
-                            PlaceholderText=""
+                            AutoMaximizeSuggestionArea="True"
+                            PlaceholderText="Filter"
+                            QueryIcon="Find"
                             Text="{Binding Filter,
                                            Mode=TwoWay,
                                            UpdateSourceTrigger=PropertyChanged}" />
         </StackPanel>
         <controls:MtListView x:Name="MedicinesListView"
-                             Margin="0,80,0,0"
+                             Margin="0,60,0,0"
                              ItemsSource="{Binding FilteredElements}"
                              SelectedItem="{Binding SelectedPain,
                                                     Mode=TwoWay}">
@@ -50,9 +50,9 @@
                 <DataTemplate x:DataType="viewModels:PainViewModel">
                     <StackPanel x:Name="MedicineDetailsStackPanel">
                         <TextBlock x:Uid="Part" Text="" />
-                        <TextBlock FontWeight="Bold" Text="{Binding FilteredElements.Item.BodyPart}" />
-                        <TextBlock Text="Type: " />
-                        <TextBlock Text="{Binding FilteredElements.Item.PainType}" />
+                        <TextBlock FontWeight="Bold" Text="{Binding BodyPart}" />
+                        <TextBlock x:Uid="Type" Text="" />
+                        <TextBlock Text="{Binding PainType}" />
                     </StackPanel>
                 </DataTemplate>
             </controls:MtListView.ItemTemplate>
