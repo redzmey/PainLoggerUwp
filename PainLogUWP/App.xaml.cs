@@ -10,6 +10,8 @@ using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Foundation.Metadata;
+using Windows.Globalization;
+using Windows.System.UserProfile;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -104,6 +106,7 @@ namespace PainLogUWP
         {
             base.OnLaunched(args);
             ApplicationViewUtilities.ConnectRootElementSizeToVisibleBounds();
+            ApplicationLanguages.PrimaryLanguageOverride = GlobalizationPreferences.Languages[0];
         }
     }
 }

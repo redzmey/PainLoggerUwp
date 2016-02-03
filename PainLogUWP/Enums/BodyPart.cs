@@ -1,13 +1,16 @@
+using Windows.ApplicationModel.Resources;
 using PainLogUWP.Attributes;
 
 namespace PainLogUWP.Enums
 {
     public class BodyPart
     {
-        public string Head = Windows.ApplicationModel.Resources.Core.ResourceManager.Current.MainResourceMap.GetValue("Resources/BodyPart_Head").ValueAsString;
-        public static string Leg;
-        public static string Arm;
-        public static string Back;
-        public static string Stomach;
+        private static readonly ResourceLoader _loader = new ResourceLoader();
+
+        public static string Head => _loader.GetString("Head");
+        public static string Leg => _loader.GetString("Leg");
+        public static string Arm => _loader.GetString("Arm");
+        public static string Back => _loader.GetString("Back");
+        public static string Stomach => _loader.GetString("Stomach");
     }
 }

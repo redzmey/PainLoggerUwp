@@ -11,7 +11,7 @@ namespace PainLogUWP.Models
             Id = Guid.NewGuid();
         }
 
-        public BodyPart BodyPart { get; set; }
+        public string BodyPart { get; set; }
         public BodySide BodySide { get; set; }
         public Guid Id { get; set; }
         public PainType PainType { get; set; }

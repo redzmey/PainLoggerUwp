@@ -67,7 +67,7 @@ namespace PainLogUWP.ViewModels
             {
                 var pain = new Pain
                 {
-                    BodyPart = BodyPart.Head,
+                    BodyPart = "Head",
                     PainType = PainType.Pulsing
                 };
 
