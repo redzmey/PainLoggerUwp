@@ -6,10 +6,11 @@ namespace PainLogUWP.Interfaces
 {
     public interface IRepository<T> where T : IElement
     {
-        void AddNew(T element);
+        Task AddNew(T element);
+        Task Delete(T element);
         Task<List<T>> GetAll();
-        T GetOne(Guid id);
-        Task<bool> IsExistst(T element);
-        void Update(T element);
+        //T GetOne(Guid id);
+        //Task<bool> IsExistst(T element);
+        //void Update(T element);
     }
 }

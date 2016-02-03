@@ -11,16 +11,70 @@ namespace PainLogUWP.Repositories
 {
     public abstract class Repository<T> : IRepository<T> where T : IElement
     {
-        private readonly StorageFolder _localFolder = ApplicationData.Current.LocalFolder;
+        private Task<List<T>> _elementsList;
 
-        public virtual async void AddNew(T element)
+        private Task<List<T>> ElementsList
         {
-            List<T> list = await GetAll() ?? new List<T>();
+            get
+            {
+                if (_elementsList == null)
+                {
+                    return GetAll();
+                }
+                else
+                    return _elementsList;
+            }
+            set { _elementsList = value; }
+        }
 
-            StorageFile textFile = await _localFolder.CreateFileAsync(typeof (T).ToString(),
-                
-                                                                      CreationCollisionOption.ReplaceExisting);
-            list.Add(element);
+        public StorageFolder LocalFolder => ApplicationData.Current.LocalFolder;
+
+        public virtual async Task AddNew(T element)
+        {
+            List<T> list = await ElementsList;
+            if (await IsExistst(element) == false)
+            {
+                list?.Add(element);
+                await WriteFile(list);
+            }
+        }
+
+        public virtual async Task Delete(T element)
+        {
+            List<T> list = await ElementsList;
+            if (await IsExistst(element) == true)
+            {
+                list?.Remove(element);
+                await WriteFile(list);
+            }
+        }
+
+        public virtual async Task<List<T>> GetAll()
+        {
+            if (await LocalFolder.TryGetItemAsync(typeof(T).ToString()) == null)
+                return new List<T>();
+
+            StorageFile textFile = await LocalFolder.GetFileAsync(typeof(T).ToString());
+            string content = await FileIO.ReadTextAsync(textFile);
+
+            return JsonConvert.DeserializeObject<List<T>>(content);
+        }
+
+        //public virtual T GetOne(Guid id)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        public virtual async Task<bool> IsExistst(T element)
+        {
+            List<T> list = await ElementsList;
+            return list.Any(x => x.Id == element.Id);
+        }
+
+        private async Task WriteFile(List<T> list)
+        {
+            StorageFile textFile = await LocalFolder.CreateFileAsync(typeof(T).ToString(),
+                                                                     CreationCollisionOption.ReplaceExisting);
             string jsonContents = JsonConvert.SerializeObject(list);
             using (IRandomAccessStream textStream = await textFile.OpenAsync(FileAccessMode.ReadWrite))
             {
@@ -32,28 +86,10 @@ namespace PainLogUWP.Repositories
             }
         }
 
-        public virtual async Task<List<T>> GetAll()
-        {
-            StorageFile textFile = await _localFolder.GetFileAsync(typeof (T).ToString());
-            string content = await FileIO.ReadTextAsync(textFile);
-            return JsonConvert.DeserializeObject<List<T>>(content);
-        }
+        //}
+        //    throw new NotImplementedException();
+        //{
 
-        public virtual T GetOne(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public virtual async Task<bool> IsExistst(T element)
-        {
-            List<T> all = await GetAll();
-
-            return all.Any(x => x.Id == element.Id);
-        }
-
-        public virtual void Update(T element)
-        {
-            throw new NotImplementedException();
-        }
+        //public virtual void Update(T element)
     }
 }

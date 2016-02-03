@@ -1,0 +1,75 @@
+﻿<paging:MtPage
+    x:Class="PainLogUWP.Views.PainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PainLogUWP.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:paging="using:MyToolkit.Paging"
+    xmlns:viewModels="using:PainLogUWP.ViewModels"
+    xmlns:controls="using:MyToolkit.Controls"
+    mc:Ignorable="d">
+    <paging:MtPage.Resources>
+        <viewModels:PainViewModel
+            x:Key="ViewModel" />
+    </paging:MtPage.Resources>
+    <paging:MtPage.BottomAppBar>
+        <CommandBar
+            DataContext="{StaticResource ViewModel}">
+            <AppBarButton
+                x:Name="BtnDelete"
+                Command="{Binding }"
+                CommandParameter="{Binding }"
+                Icon="Delete"
+                Label="Delete" />
+
+            <AppBarButton
+                x:Name="BtnAddNew"
+                Icon="Add"
+                Label="Add" />
+            <AppBarButton
+                x:Name="BtnEdit"
+                Icon="Edit"
+                Label="Edit" />
+        </CommandBar>
+    </paging:MtPage.BottomAppBar>
+    <Grid
+        DataContext="{StaticResource ViewModel}"
+        Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <StackPanel>
+            <TextBlock
+                Text="Filter"
+                FontWeight="Bold"
+                Margin="0,0,0,2" />
+            <AutoSuggestBox
+                Text="{Binding Filter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                PlaceholderText="Filter"
+                Margin="0,0,0,16"
+                AutoMaximizeSuggestionArea="False" />
+        </StackPanel>
+        <controls:MtListView
+            x:Name="MedicinesListView"
+            ItemsSource="{Binding  FilteredElements}"
+            SelectedItem="{Binding SelectedPain,
+                                                    Mode=TwoWay}"
+            Margin="0,80,0,0">
+            <controls:MtListView.ItemTemplate>
+                <DataTemplate
+                    x:DataType="viewModels:PainViewModel">
+                    <StackPanel
+                        x:Name="MedicineDetailsStackPanel">
+                        <TextBlock
+                            Text="Part: " />
+                        <TextBlock
+                            FontWeight="Bold"
+                            Text="{Binding SelectedPain.BodyPart}" />
+                        <TextBlock
+                            Text="Type: " />
+                        <TextBlock
+                            Text="{Binding SelectedPain.PainType}" />
+                    </StackPanel>
+                </DataTemplate>
+            </controls:MtListView.ItemTemplate>
+        </controls:MtListView>
+    </Grid>
+</paging:MtPage>
