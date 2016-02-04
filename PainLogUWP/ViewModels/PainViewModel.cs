@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Windows.UI.Xaml.Controls;
 using MyToolkit.Collections;
 using MyToolkit.Mvvm;
 using PainLogUWP.Enums;
@@ -61,13 +63,18 @@ namespace PainLogUWP.ViewModels
             set { Set(ref _painList, value); }
         }
 
+
+        public List<string> SuggestedValues => PainList.Select(x => x.BodyPart).Distinct().ToList(); 
+
         private void MockPainList()
         {
-            for (int i = 0; i < 50; i++)
+            string[] parts = new[] {"Head", "Body", "Leg", "Stomach"};
+            var rnd = new Random();
+            for (int i = 0; i < 15; i++)
             {
                 var pain = new Pain
                 {
-                    BodyPart = "Head",
+                    BodyPart = parts[rnd.Next(parts.Length)],
                     PainType = PainType.Pulsing
                 };
 
