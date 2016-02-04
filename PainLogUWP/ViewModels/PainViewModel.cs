@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Windows.UI.Xaml.Controls;
 using MyToolkit.Collections;
 using MyToolkit.Mvvm;
 using PainLogUWP.Enums;
@@ -10,13 +9,14 @@ using PainLogUWP.Repositories;
 
 namespace PainLogUWP.ViewModels
 {
-    public class PainViewModel : ViewModelBase 
+    public class PainViewModel : ViewModelBase
     {
-
-        private Pain _selectedPain;
+        private string _filter;
         private List<Pain> _painList;
         private Repository<Pain> _repo;
-        private string _filter;
+
+        private Pain _selectedPain;
+        private List<string> _suggestedValues;
 
         public PainViewModel()
         {
@@ -24,19 +24,8 @@ namespace PainLogUWP.ViewModels
             LoadList();
             FilteredElements = new ObservableCollectionView<Pain>(AllElements);
         }
+
         public MtObservableCollection<Pain> AllElements { get; private set; }
-
-        private async void LoadList()
-        {
-            _repo = new PainRepository();
-            PainList = await _repo.GetAll();
-            if (!PainList.Any())
-                MockPainList();
-
-            AllElements.Initialize(PainList);
-        }
-
-        public ObservableCollectionView<Pain> FilteredElements { get; private set; }
 
         public string Filter
         {
@@ -48,38 +37,55 @@ namespace PainLogUWP.ViewModels
                     FilteredElements.Filter = entry =>
                         string.IsNullOrEmpty(_filter) ||
                         entry.BodyPart.ToString().Contains(_filter);
+                    SuggestedValues = PainList.Select(x => x.BodyPart).Distinct().Where(x => x.ToLower().Contains(_filter.ToLower())).ToList();
                 }
             }
         }
+
+        public ObservableCollectionView<Pain> FilteredElements { get; private set; }
+
+        public List<Pain> PainList
+        {
+            get { return _painList??new List<Pain>(); }
+            set { Set(ref _painList, value); }
+        }
+
         public Pain SelectedPain
         {
             get { return _selectedPain; }
             set { Set(ref _selectedPain, value); }
         }
 
-        public List<Pain> PainList
+        public List<string> SuggestedValues
         {
-            get { return _painList; }
-            set { Set(ref _painList, value); }
+            get { return _suggestedValues; }
+            set { Set(ref _suggestedValues, value); }
         }
 
-
-        public List<string> SuggestedValues => PainList.Select(x => x.BodyPart).Distinct().ToList(); 
-
-        private void MockPainList()
+        private async void LoadList()
         {
-            string[] parts = new[] {"Head", "Body", "Leg", "Stomach"};
-            var rnd = new Random();
-            for (int i = 0; i < 15; i++)
+            _repo = new PainRepository();
+            PainList = await _repo.GetAll();
+            if (PainList==null || !PainList.Any())
+                MockPainList();
+
+            AllElements.Initialize(PainList);
+        }
+
+        private async void MockPainList()
+        {
+            string[] parts = {"Head", "Body", "Leg", "Stomach"};
+            Random rnd = new Random();
+            for (int i = 0; i < 500; i++)
             {
-                var pain = new Pain
+                Pain pain = new Pain
                 {
                     BodyPart = parts[rnd.Next(parts.Length)],
                     PainType = PainType.Pulsing
                 };
 
-                _painList.Add(pain);
-               // _repo.AddNew(pain);
+               // _painList.Add(pain);
+               await _repo.AddNew(pain);
             }
         }
     }

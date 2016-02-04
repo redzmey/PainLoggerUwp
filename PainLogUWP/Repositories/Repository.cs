@@ -57,7 +57,7 @@ namespace PainLogUWP.Repositories
             StorageFile textFile = await LocalFolder.GetFileAsync(typeof(T).ToString());
             string content = await FileIO.ReadTextAsync(textFile);
 
-            return JsonConvert.DeserializeObject<List<T>>(content);
+            return JsonConvert.DeserializeObject<List<T>>(content)??new List<T>();
         }
 
         //public virtual T GetOne(Guid id)
