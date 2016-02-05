@@ -42,9 +42,9 @@ namespace PainLogUWP.Repositories
         public virtual async Task Delete(T element)
         {
             List<T> list = await ElementsList;
-            if (await IsExistst(element) == true)
+            if (list!=null && list.Any(x => x.Id == element.Id))
             {
-                list?.Remove(element);
+                list.RemoveAll(x=>x.Id==element.Id);
                 await WriteFile(list);
             }
         }

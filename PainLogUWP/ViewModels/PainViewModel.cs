@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Input;
 using MyToolkit.Collections;
+using MyToolkit.Command;
 using MyToolkit.Mvvm;
 using PainLogUWP.Enums;
 using PainLogUWP.Models;
@@ -23,9 +26,16 @@ namespace PainLogUWP.ViewModels
             AllElements = new MtObservableCollection<Pain>();
             LoadList();
             FilteredElements = new ObservableCollectionView<Pain>(AllElements);
+
+            #region Commands
+
+            DeletePainCommand = new AsyncRelayCommand<Pain>(DeletePain, pain => pain != null);
+
+            #endregion
         }
 
         public MtObservableCollection<Pain> AllElements { get; private set; }
+        public AsyncRelayCommand<Pain> DeletePainCommand { get; private set; }
 
         public string Filter
         {
@@ -46,7 +56,7 @@ namespace PainLogUWP.ViewModels
 
         public List<Pain> PainList
         {
-            get { return _painList??new List<Pain>(); }
+            get { return _painList ?? new List<Pain>(); }
             set { Set(ref _painList, value); }
         }
 
@@ -62,12 +72,17 @@ namespace PainLogUWP.ViewModels
             set { Set(ref _suggestedValues, value); }
         }
 
+        private async Task DeletePain(Pain pain)
+        {
+            await _repo.Delete(pain);
+        }
+
         private async void LoadList()
         {
             _repo = new PainRepository();
             PainList = await _repo.GetAll();
-            if (PainList==null || !PainList.Any())
-                MockPainList();
+            //if (PainList == null || !PainList.Any())
+            //    MockPainList();
 
             AllElements.Initialize(PainList);
         }
@@ -84,8 +99,8 @@ namespace PainLogUWP.ViewModels
                     PainType = PainType.Pulsing
                 };
 
-               // _painList.Add(pain);
-               await _repo.AddNew(pain);
+                // _painList.Add(pain);
+                await _repo.AddNew(pain);
             }
         }
     }

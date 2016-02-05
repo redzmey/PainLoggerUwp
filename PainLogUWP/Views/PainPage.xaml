@@ -7,15 +7,18 @@
                xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                xmlns:paging="using:MyToolkit.Paging"
                xmlns:viewModels="using:PainLogUWP.ViewModels"
+               VerticalAlignment="Bottom"
                mc:Ignorable="d">
     <paging:MtPage.Resources>
         <viewModels:PainViewModel x:Key="ViewModel" />
     </paging:MtPage.Resources>
     <paging:MtPage.BottomAppBar>
-        <CommandBar DataContext="{StaticResource ViewModel}">
+        <CommandBar Height="40" UseSystemFocusVisuals="True">
             <AppBarButton x:Name="BtnDelete"
-                          Command="{Binding }"
-                          CommandParameter="{Binding }"
+                          Command="{Binding DeletePainCommand,
+                                            Source={StaticResource ViewModel}}"
+                          CommandParameter="{Binding SelectedPain,
+                                                     Source={StaticResource ViewModel}}"
                           Icon="Delete"
                           Label="Delete" />
 
@@ -28,11 +31,17 @@
         </CommandBar>
     </paging:MtPage.BottomAppBar>
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" DataContext="{StaticResource ViewModel}">
-        <StackPanel>
-            <TextBlock x:Uid="Filter"
-                       Margin="0,0,0,2"
-                       FontWeight="Bold"
-                       Text="Filter" />
+        <StackPanel Margin="0,0,0,40">
+            <StackPanel Margin="0,0,0,0" Orientation="Horizontal">
+                <TextBlock x:Uid="Filter"
+                           Margin="0,0,50,2"
+                           FontWeight="Bold"
+                           Text="Filter" />
+                <TextBlock x:Name="tbxItemCount"
+                           Width="208"
+                           Text="{Binding FilteredElements.Count}"
+                           TextWrapping="Wrap" />
+            </StackPanel>
             <AutoSuggestBox Margin="0,0,0,16"
                             AutoMaximizeSuggestionArea="True"
                             ItemsSource="{Binding SuggestedValues}"
@@ -43,7 +52,7 @@
                                            UpdateSourceTrigger=PropertyChanged}" />
         </StackPanel>
         <controls:MtListView x:Name="MedicinesListView"
-                             Margin="0,60,0,0"
+                             Margin="0,60,0,40"
                              ItemsSource="{Binding FilteredElements}"
                              SelectedItem="{Binding SelectedPain,
                                                     Mode=TwoWay}">

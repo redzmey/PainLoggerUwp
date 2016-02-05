@@ -118,6 +118,9 @@
     <Compile Include="Views\PainPage.xaml.cs">
       <DependentUpon>PainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\PainPropertiesDialog.xaml.cs">
+      <DependentUpon>PainPropertiesDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
@@ -148,6 +151,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\PainPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PainPropertiesDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
